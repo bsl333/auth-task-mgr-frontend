@@ -1,0 +1,20 @@
+{
+  "name": "auth-task-mgr-frontend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "browserify scripts/main.js -o dist/bundle.js",
+    "watch": "watchify scripts/main.js -o dist/bundle.js",
+    "dev": "run-all live-server \"npm run watch\""
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "browserify": "^16.2.2",
+    "live-server": "^1.2.0",
+    "run-all": "^1.0.1",
+    "watchify": "^3.11.0"
+  }
+}
