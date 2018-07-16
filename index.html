@@ -5,19 +5,29 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+    crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/js/bootstrap.min.js" integrity="sha384-o+RDsa0aLu++PJvFqy8fFScvbHFLtbvScb8AjopnFD+iEQ7wo/CG0xlczd+2O/em"
+    crossorigin="anonymous"></script>
   <script src="./scripts/main.js"></script>
+
+
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
-    crossorigin="anonymous">
+    crossorigin="anonymous" />
+
+
   <title>Task Manager</title>
 </head>
 
 <body>
   <nav>
     <ul class="nav justify-content-center bg-dark" <li class="nav-item">
-      <a class="nav-link active" href="#">Login</a>
+      <a class="nav-link active" id="toggleLogin" href="#">Login</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#">Register</a>
+        <a class="nav-link" id="toggleRegister" href="#">Register</a>
       </li>
     </ul>
   </nav>
@@ -28,7 +38,8 @@
     </div> -->
     <div class="row justify-content-center">
       <div class="col-md-4 text-center">
-        <form class="border">
+        <form class="border loginForm">
+
           <h1 class="border-bottom">Login</h1>
           <div class="form-group mx-5">
             <label for="email">Email</label>
@@ -42,15 +53,15 @@
           <button type="submit" class="btn btn-primary mb-3">Login!</button>
         </form>
 
-        <form class="border d-none">
+        <form class="border registerForm" style="display:none">
           <h1 class="border-bottom">Register</h1>
           <div class="form-group mx-5">
-            <label for="email">Email</label>
-            <input type="email" name="email" id="email" class="form-control">
+            <label for="regEmail">Email</label>
+            <input type="email" name="email" id="regEmail" class="form-control">
           </div>
           <div class="form-group mx-5">
-            <label for="password">Password</label>
-            <input type="password" name="password" id="password" class="form-control">
+            <label for="regPassword">Password</label>
+            <input type="password" name="password" id="regPassword" class="form-control">
           </div>
 
           <button type="submit" class="btn btn-primary mb-3">Login!</button>
@@ -58,6 +69,8 @@
       </div>
     </div>
   </main>
+
+
 </body>
 
 </html>
