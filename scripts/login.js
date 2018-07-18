@@ -33,7 +33,7 @@ function createLogin() {
       email: event.target.email.value,
       password: event.target.password.value
     }
-    axios.post('http://localhost:5000/api/users/login', body)
+    return axios.post('http://localhost:5000/api/users/login', body)
       .then(res => {
         console.log(res)
         localStorage.setItem('token', res.data.token)
