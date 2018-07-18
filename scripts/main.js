@@ -6,4 +6,9 @@ if (!token) {
   login.createLogin()
 } else {
   getTask.getTasks(token)
+    .catch(e => {
+      console.log(e)
+      localStorage.removeItem('token')
+      login.createLogin()
+    })
 }

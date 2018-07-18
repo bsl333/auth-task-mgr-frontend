@@ -1665,7 +1665,7 @@ function createLogin() {
       email: event.target.email.value,
       password: event.target.password.value
     }
-    axios.post('http://localhost:5000/api/users/login', body)
+    return axios.post('http://localhost:5000/api/users/login', body)
       .then(res => {
         console.log(res)
         localStorage.setItem('token', res.data.token)
@@ -1736,18 +1736,73 @@ if (!token) {
   login.createLogin()
 } else {
   getTask.getTasks(token)
+    .catch(e => {
+      console.log(e)
+      localStorage.removeItem('token')
+      login.createLogin()
+    })
 }
 },{"./login":28,"./taskList":31}],31:[function(require,module,exports){
 const axios = require('axios')
+const taskListTemplate = require('./taskListTemplate')
 
 function getTasks(token) {
-  axios.get('http://localhost:5000/api/lists', {
+  return axios.get('http://localhost:5000/api/lists', {
     headers: {
       authorization: `Bearer ${token}`
     }
   })
-  .then(console.log)
+  .then(res => {
+    console.log(res)
+    const left = document.querySelector('#left')
+    left.innerHTML =  taskListTemplate.getAllLists()
+    const ul = document.querySelector('#all-lists')
+    const lists = res.data.lists
+    console.log(lists[0])
+    
+    lists.forEach(list => {
+      const li = document.createElement('li')
+      li.className = 'list-group-item'
+      li.innerText = list.title
+      ul.appendChild(li)
+    })
+
+    left.innerHTML += taskListTemplate.newTaskForm()
+
+
+  })
 }
 
 module.exports = { getTasks }
-},{"axios":1}]},{},[30]);
+},{"./taskListTemplate":32,"axios":1}],32:[function(require,module,exports){
+function getAllLists() {
+  return `
+  <h3>All Lists</h3>
+  <ul class="list-group" id="all-lists">
+  </ul>
+  `
+}
+
+function newTaskForm() {
+  return `
+  <form class="mt-5 bg-dark p-3">
+    <h4>Create New Task</h4>
+    <div class="form-group">
+      <label for="title">Title</label>
+      <input type="text" name="title" id="title" class="form-control">
+    </div>
+    <div class="form-group">
+      <label for="description">Description</label>
+      <input type="text" name="description" id="description" class="form-control">
+    </div>
+
+    <button class="btn btn-primary">Create New Task</button>
+  </form>
+  `
+}
+
+module.exports = {
+  getAllLists,
+  newTaskForm
+}
+},{}]},{},[30]);
