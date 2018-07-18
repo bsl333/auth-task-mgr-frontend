@@ -1,6 +1,6 @@
 function login() {
   return `
-  <form class="border loginForm">
+  <form class="border" id="loginForm">
     <h1 class="border-bottom">Login</h1>
     <div class="form-group mx-5">
       <label for="email">Email</label>
@@ -18,7 +18,7 @@ function login() {
 
 function register() {
   return `
-  <form class="border registerForm">
+  <form class="border" id="registerForm">
     <h1 class="border-bottom">Register</h1>
     <div class="form-group mx-5">
       <label for="regEmail">Email</label>
