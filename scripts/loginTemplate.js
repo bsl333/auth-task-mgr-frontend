@@ -34,7 +34,14 @@ function register() {
   `
 }
 
+function invalidLogin() {
+  return `
+          <div class="bg-danger" id="invalid-login">
+            Invalid Login </div>`
+}
+
 module.exports = {
   login,
-  register
+  register,
+  invalidLogin
 }
