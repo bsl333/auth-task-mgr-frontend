@@ -46,6 +46,7 @@ function createLogin() {
       .catch(e => {
         const centerDiv = document.querySelector('#center')
         centerDiv.innerHTML += loginTemplate.invalidLogin()
+        setTimeout(() => createLogin(), 2000) 
         console.log(e)
       })
 
