@@ -1648,23 +1648,54 @@ const loginTemplate = require('./loginTemplate')
 const { getTasks } = require('./taskList')
 const { herokuURL } = require('./constants')
 
-const loginBtn = document.querySelector('#toggleLogin')
-const registerBtn = document.querySelector('#toggleRegister')
 
-loginBtn.addEventListener('click', (event) => {
-  event.preventDefault()
-  const centerDiv = document.querySelector('#center')
-  centerDiv.innerHTML = loginTemplate.login()
-  location.hash = '/login'
-})
 
-registerBtn.addEventListener('click', (event) => {
-  event.preventDefault()
-  const centerDiv = document.querySelector('#center')
-  centerDiv.innerHTML = loginTemplate.register()
-  location.hash = '/register'
-})
+function createNavBar() {
+  const main = document.querySelector('#nb')
 
+    main.innerHTML = loginTemplate.NavBarLoginTemplate()
+    const loginBtn = document.querySelector('#toggleLogin')
+    const registerBtn = document.querySelector('#toggleRegister')
+
+    loginBtn.addEventListener('click', (event) => {
+      event.preventDefault()
+      const centerDiv = document.querySelector('#center')
+      centerDiv.innerHTML = loginTemplate.login()
+      location.hash = '/login'
+    })
+
+    registerBtn.addEventListener('click', (event) => {
+      event.preventDefault()
+      const centerDiv = document.querySelector('#center')
+      centerDiv.innerHTML = loginTemplate.register()
+      location.hash = '/register'
+    })
+}
+
+function createNavBarTasks() {
+  const navbar = document.querySelector('#nb')
+
+  navbar.innerHTML = loginTemplate.NavBarTaskTemplate()
+  // const allTaskBtn = document.querySelector('#')
+  // const newListBtn = document.querySelector('#')
+  const logoutBtn = document.querySelector('#logout')
+
+  logoutBtn.addEventListener('click', (event) => {
+    event.preventDefault()
+    localStorage.removeItem('token')
+    createLogin()
+    location.hash = '/login'
+    createNavBar()
+    document.querySelector('#left').innerHTML = ''
+  })
+
+  // registerBtn.addEventListener('click', (event) => {
+  //   event.preventDefault()
+  //   const centerDiv = document.querySelector('#center')
+  //   centerDiv.innerHTML = loginTemplate.register()
+  //   location.hash = '/register'
+  // })
+}
 
 
 
@@ -1688,6 +1719,7 @@ function createLogin() {
       })
       .then(token => {
         getTasks(token)
+        createNavBarTasks()
       })
       .catch(e => {
         const centerDiv = document.querySelector('#center')
@@ -1698,8 +1730,7 @@ function createLogin() {
 
   })
 }
-module.exports = { createLogin }
-},{"./constants":28,"./loginTemplate":30,"./taskList":32,"axios":1}],30:[function(require,module,exports){
+
 function login() {
   return `
   <form class="border" id="loginForm">
@@ -1742,10 +1773,49 @@ function invalidLogin() {
             Invalid Login </div>`
 }
 
+function NavBarTaskTemplate() {
+  return `
+    
+      <ul class="nav justify-content-center bg-dark text-white">
+
+        <li class="nav-item">
+          <a class="nav-link active" id="allTasks" href="#">All Tasks</a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link active" id="newList" href="#">New List</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" id="logout" href="#">Logout</a>
+        </li>
+      </ul>
+    
+    `
+
+}
+
+function NavBarLoginTemplate() {
+  return `
+    
+      <ul class="nav justify-content-center bg-dark text-white">
+        <li class="nav-item">
+          <a class="nav-link active" id="toggleLogin" href="#">Login</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" id="toggleRegister" href="#">Register</a>
+        </li>
+      </ul>
+    
+    `
+
+}
+
 module.exports = {
   login,
   register,
-  invalidLogin
+  invalidLogin,
+  NavBarTaskTemplate,
+  NavBarLoginTemplate
 }
 },{}],31:[function(require,module,exports){
 const login = require('./login')
@@ -1753,9 +1823,11 @@ const getTask = require('./taskList')
 
 const token = window.localStorage.getItem('token')
 if (!token) {
+  login.createNavBar()
   login.createLogin()
 
 } else {
+  login.createNavBarTasks()
   getTask.getTasks(token)
     .catch(e => {
       console.log(e)

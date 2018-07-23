@@ -4,23 +4,54 @@ const loginTemplate = require('./loginTemplate')
 const { getTasks } = require('./taskList')
 const { herokuURL } = require('./constants')
 
-const loginBtn = document.querySelector('#toggleLogin')
-const registerBtn = document.querySelector('#toggleRegister')
 
-loginBtn.addEventListener('click', (event) => {
-  event.preventDefault()
-  const centerDiv = document.querySelector('#center')
-  centerDiv.innerHTML = loginTemplate.login()
-  location.hash = '/login'
-})
 
-registerBtn.addEventListener('click', (event) => {
-  event.preventDefault()
-  const centerDiv = document.querySelector('#center')
-  centerDiv.innerHTML = loginTemplate.register()
-  location.hash = '/register'
-})
+function createNavBar() {
+  const main = document.querySelector('#nb')
 
+    main.innerHTML = loginTemplate.NavBarLoginTemplate()
+    const loginBtn = document.querySelector('#toggleLogin')
+    const registerBtn = document.querySelector('#toggleRegister')
+
+    loginBtn.addEventListener('click', (event) => {
+      event.preventDefault()
+      const centerDiv = document.querySelector('#center')
+      centerDiv.innerHTML = loginTemplate.login()
+      location.hash = '/login'
+    })
+
+    registerBtn.addEventListener('click', (event) => {
+      event.preventDefault()
+      const centerDiv = document.querySelector('#center')
+      centerDiv.innerHTML = loginTemplate.register()
+      location.hash = '/register'
+    })
+}
+
+function createNavBarTasks() {
+  const navbar = document.querySelector('#nb')
+
+  navbar.innerHTML = loginTemplate.NavBarTaskTemplate()
+  // const allTaskBtn = document.querySelector('#')
+  // const newListBtn = document.querySelector('#')
+  const logoutBtn = document.querySelector('#logout')
+
+  logoutBtn.addEventListener('click', (event) => {
+    event.preventDefault()
+    localStorage.removeItem('token')
+    createLogin()
+    location.hash = '/login'
+    createNavBar()
+    document.querySelector('#left').innerHTML = ''
+  })
+
+  // registerBtn.addEventListener('click', (event) => {
+  //   event.preventDefault()
+  //   const centerDiv = document.querySelector('#center')
+  //   centerDiv.innerHTML = loginTemplate.register()
+  //   location.hash = '/register'
+  // })
+}
 
 
 
@@ -44,6 +75,7 @@ function createLogin() {
       })
       .then(token => {
         getTasks(token)
+        createNavBarTasks()
       })
       .catch(e => {
         const centerDiv = document.querySelector('#center')
@@ -54,4 +86,5 @@ function createLogin() {
 
   })
 }
-module.exports = { createLogin }
+
+module.exports = { createLogin, createNavBar, createNavBarTasks }
