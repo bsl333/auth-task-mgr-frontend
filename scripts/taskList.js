@@ -15,9 +15,10 @@ function getTasks(token) {
       generateLists(lists)
       // CENTER PANEL: only render first list to start
       generateTasks(lists[0])
-    })
 
-  center.innerHTML = doingUL
+      // generateCompletedTasks(lists[0])
+
+    })
 }
 
 function generateLists(lists) {
@@ -49,23 +50,33 @@ function generateLists(lists) {
 function generateTasks({ tasks }) {
   const center = document.querySelector('#center')
   center.innerHTML = taskListTemplate.centerTasks()
-  const doingUL = document.querySelector('#doingUL')
+  const doingUL = document.querySelector('#doing-ul')
+
+  const right = document.querySelector('#right')
+  right.innerHTML = taskListTemplate.completedTasks()
+  completedUL = document.querySelector('#completed-ul')
 
   tasks.forEach(task => {
-    const doingLi = document.createElement('li')
-    doingLi.innerHTML += taskListTemplate.doingCards(task.title, task.description)
-    doingUL.appendChild(doingLi)
+    const li = document.createElement('li')
+    if (!task.completed) {
+      li.innerHTML = taskListTemplate.doingCards(task.title, task.description)
+      doingUL.appendChild(li)
+    } else {
+      li.innerHTML = taskListTemplate.completedCards(task.title, task.description)
+      completedUL.appendChild(li)
+    }
   })
 }
 
+// function generateCompletedTasks({ tasks }) {
+//   const completedTasks = tasks.filter(task => task.completed)
+//   console.log(completedTasks)
+
+// }
 
 function createTask(token, listId) {
   const newTitle = document.querySelector('#title').value
   const newDesc = document.querySelector('#description').value
-
-
-  console.log('IN CREATE TASK', token)
-
   return axios.post(`${herokuURL}/lists/${listId}/tasks/`,
     {
       headers: {

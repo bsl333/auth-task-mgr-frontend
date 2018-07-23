@@ -1779,9 +1779,10 @@ function getTasks(token) {
       generateLists(lists)
       // CENTER PANEL: only render first list to start
       generateTasks(lists[0])
-    })
 
-  center.innerHTML = doingUL
+      // generateCompletedTasks(lists[0])
+
+    })
 }
 
 function generateLists(lists) {
@@ -1813,23 +1814,33 @@ function generateLists(lists) {
 function generateTasks({ tasks }) {
   const center = document.querySelector('#center')
   center.innerHTML = taskListTemplate.centerTasks()
-  const doingUL = document.querySelector('#doingUL')
+  const doingUL = document.querySelector('#doing-ul')
+
+  const right = document.querySelector('#right')
+  right.innerHTML = taskListTemplate.completedTasks()
+  completedUL = document.querySelector('#completed-ul')
 
   tasks.forEach(task => {
-    const doingLi = document.createElement('li')
-    doingLi.innerHTML += taskListTemplate.doingCards(task.title, task.description)
-    doingUL.appendChild(doingLi)
+    const li = document.createElement('li')
+    if (!task.completed) {
+      li.innerHTML = taskListTemplate.doingCards(task.title, task.description)
+      doingUL.appendChild(li)
+    } else {
+      li.innerHTML = taskListTemplate.completedCards(task.title, task.description)
+      completedUL.appendChild(li)
+    }
   })
 }
 
+// function generateCompletedTasks({ tasks }) {
+//   const completedTasks = tasks.filter(task => task.completed)
+//   console.log(completedTasks)
+
+// }
 
 function createTask(token, listId) {
   const newTitle = document.querySelector('#title').value
   const newDesc = document.querySelector('#description').value
-
-
-  console.log('IN CREATE TASK', token)
-
   return axios.post(`${herokuURL}/lists/${listId}/tasks/`,
     {
       headers: {
@@ -1857,14 +1868,22 @@ function getAllLists() {
 function centerTasks() {
   return `
   <h3>Doing</h3>
-  <ul id="doingUL"></ul>
+  <ul id="doing-ul"></ul>
+  `
+
+}
+
+function completedTasks() {
+  return `
+  <h3>Completed</h3>
+  <ul id="completed-ul"></ul>
   `
 
 }
 
 function newTaskForm() {
   return `
-  <form class="mt-5 bg-dark p-3" id="newTask">
+  <form class="mt-5 bg-dark p-3 text-white" id="newTask">
     <h4>Create New Task</h4>
     <div class="form-group">
       <label for="title">Title</label>
@@ -1886,7 +1905,19 @@ function doingCards(title, desc) {
     <div class="card-body">
       <h5 class="card-title">${title}</h5>
       <p class="card-text">${desc}</p>
-      <a href="#" class="btn btn-primary">Go somewhere</a>
+      <a href="#" class="btn btn-success btn-max-width">Complete</a>
+    </div>
+  </div>
+  `
+}
+
+function completedCards (title, desc) {
+  return `  
+  <div class="card text-center">
+    <div class="card-body">
+      <h5 class="card-title">${title}</h5>
+      <p class="card-text">${desc}</p>
+      <a href="#" class="btn btn-danger btn-max-width">Remove</a>
     </div>
   </div>
   `
@@ -1896,6 +1927,8 @@ module.exports = {
   getAllLists,
   newTaskForm,
   doingCards,
-  centerTasks
+  centerTasks,
+  completedCards,
+  completedTasks
 }
 },{}]},{},[31]);
