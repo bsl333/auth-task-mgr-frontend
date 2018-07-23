@@ -43,7 +43,7 @@ function invalidLogin() {
 function NavBarTaskTemplate() {
   return `
     
-      <ul class="nav justify-content-center bg-dark text-white">
+      <ul class="nav justify-content-center bg-dark">
 
         <li class="nav-item">
           <a class="nav-link active" id="allTasks" href="#">All Tasks</a>
@@ -64,7 +64,7 @@ function NavBarTaskTemplate() {
 function NavBarLoginTemplate() {
   return `
     
-      <ul class="nav justify-content-center bg-dark text-white">
+      <ul class="nav justify-content-center bg-dark">
         <li class="nav-item">
           <a class="nav-link active" id="toggleLogin" href="#">Login</a>
         </li>
