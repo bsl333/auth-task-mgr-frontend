@@ -1,4 +1,6 @@
 const loginTemplate = require('./loginTemplate')
+const { getTasks } = require('./taskList')
+const { herokuURL } = require('./constants')
 
 const loginBtn = document.querySelector('#toggleLogin')
 const registerBtn = document.querySelector('#toggleRegister')
@@ -33,11 +35,13 @@ function createLogin() {
       email: event.target.email.value,
       password: event.target.password.value
     }
-    return axios.post('http://localhost:5000/api/users/login', body)
+    return axios.post(`${herokuURL}/users/login`, body)
       .then(res => {
-        console.log(res)
         localStorage.setItem('token', res.data.token)
-       
+        return res.data.token
+      })
+      .then(token => {
+        getTasks(token)
       })
       .catch(e => {
         const centerDiv = document.querySelector('#center')
