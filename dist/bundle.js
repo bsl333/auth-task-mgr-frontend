@@ -1777,10 +1777,9 @@ function getTasks(token) {
       const { lists } = res.data
       // LEFT PANEL
       generateLists(lists)
-      // CENTER PANEL: only render first list to start
+      // CENTER/RIGHT PANEL: only render first list to start
       generateTasks(lists[0])
 
-      // generateCompletedTasks(lists[0])
 
     })
 }
@@ -1831,12 +1830,6 @@ function generateTasks({ tasks }) {
     }
   })
 }
-
-// function generateCompletedTasks({ tasks }) {
-//   const completedTasks = tasks.filter(task => task.completed)
-//   console.log(completedTasks)
-
-// }
 
 function createTask(token, listId) {
   const newTitle = document.querySelector('#title').value
