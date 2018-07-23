@@ -40,8 +40,47 @@ function invalidLogin() {
             Invalid Login </div>`
 }
 
+function NavBarTaskTemplate() {
+  return `
+    
+      <ul class="nav justify-content-center bg-dark text-white">
+
+        <li class="nav-item">
+          <a class="nav-link active" id="allTasks" href="#">All Tasks</a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link active" id="newList" href="#">New List</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" id="logout" href="#">Logout</a>
+        </li>
+      </ul>
+    
+    `
+
+}
+
+function NavBarLoginTemplate() {
+  return `
+    
+      <ul class="nav justify-content-center bg-dark text-white">
+        <li class="nav-item">
+          <a class="nav-link active" id="toggleLogin" href="#">Login</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" id="toggleRegister" href="#">Register</a>
+        </li>
+      </ul>
+    
+    `
+
+}
+
 module.exports = {
   login,
   register,
-  invalidLogin
+  invalidLogin,
+  NavBarTaskTemplate,
+  NavBarLoginTemplate
 }
