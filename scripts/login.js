@@ -43,14 +43,8 @@ function createNavBarTasks() {
     location.hash = '/login'
     createNavBar()
     document.querySelector('#left').innerHTML = ''
+    document.querySelector('#right').innerHTML = ''
   })
-
-  // registerBtn.addEventListener('click', (event) => {
-  //   event.preventDefault()
-  //   const centerDiv = document.querySelector('#center')
-  //   centerDiv.innerHTML = loginTemplate.register()
-  //   location.hash = '/register'
-  // })
 }
 
 

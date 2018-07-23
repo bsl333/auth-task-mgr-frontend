@@ -21,7 +21,7 @@ function getTasks(token) {
 }
 
 function generateLists(lists) {
-  window.location.hash = `/login/${lists[0].user_id}`
+  window.location.hash = `/lists/${lists[0].id}`
   const left = document.querySelector('#left')
   left.innerHTML = taskListTemplate.getAllLists()
   const ul = document.querySelector('#all-lists')
@@ -36,6 +36,7 @@ function generateLists(lists) {
       generateTasks(list)
       // remove active classes from all lis except selected
       const lis = Array.from(document.querySelector('#all-lists').children)
+      window.location.hash = `/lists/${list.id}`
       lis.forEach(child => child.classList.remove('active'))
       li.classList.add('active')
     })
