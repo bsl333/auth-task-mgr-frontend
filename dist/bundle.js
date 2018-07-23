@@ -1774,21 +1774,14 @@ function getTasks(token) {
     }
   })
     .then(res => {
-      console.log('THIS', res.data)
       const { lists } = res.data
-      console.log(res.data)
-      
       generateLists(lists)
 
       //CENTER PANEL
       const center = document.querySelector('#center')
       center.innerHTML = taskListTemplate.centerTasks()
       const doingUL = document.querySelector('#doingUL')
-
-      //FOR CENTER PANEL
-      // let tasks = res.tasks
-
-      // console.log('TASKS: ', userID)
+      
       lists[0].tasks.forEach(task => {
         //console.log('task.title:', task.title)
         const doingLi = document.createElement('li')
