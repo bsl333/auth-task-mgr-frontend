@@ -1630,7 +1630,21 @@ process.chdir = function (dir) {
 process.umask = function() { return 0; };
 
 },{}],28:[function(require,module,exports){
+const localhostURL = 'http://localhost:5000/api'
+const herokuURL = 'https://task-manager-back-end.herokuapp.com/api'
+const baseURL = window.location.href.includes('herokuapp') ? herokuURL : localhostURL
+
+module.exports = {
+  localhostURL,
+  herokuURL,
+  baseURL
+}
+
+
+},{}],29:[function(require,module,exports){
 const loginTemplate = require('./loginTemplate')
+const { getTasks } = require('./taskList')
+const { herokuURL } = require('./constants')
 
 const loginBtn = document.querySelector('#toggleLogin')
 const registerBtn = document.querySelector('#toggleRegister')
@@ -1665,11 +1679,13 @@ function createLogin() {
       email: event.target.email.value,
       password: event.target.password.value
     }
-    return axios.post('http://localhost:5000/api/users/login', body)
+    return axios.post(`${herokuURL}/users/login`, body)
       .then(res => {
-        console.log(res)
         localStorage.setItem('token', res.data.token)
-       
+        return res.data.token
+      })
+      .then(token => {
+        getTasks(token)
       })
       .catch(e => {
         const centerDiv = document.querySelector('#center')
@@ -1680,7 +1696,7 @@ function createLogin() {
   })
 }
 module.exports = { createLogin }
-},{"./loginTemplate":29}],29:[function(require,module,exports){
+},{"./constants":28,"./loginTemplate":30,"./taskList":32}],30:[function(require,module,exports){
 function login() {
   return `
   <form class="border" id="loginForm">
@@ -1728,13 +1744,14 @@ module.exports = {
   register,
   invalidLogin
 }
-},{}],30:[function(require,module,exports){
+},{}],31:[function(require,module,exports){
 const login = require('./login')
 const getTask = require('./taskList')
 
 const token = window.localStorage.getItem('token')
 if (!token) {
   login.createLogin()
+
 } else {
   getTask.getTasks(token)
     .catch(e => {
@@ -1743,12 +1760,14 @@ if (!token) {
       login.createLogin()
     })
 }
-},{"./login":28,"./taskList":31}],31:[function(require,module,exports){
+},{"./login":29,"./taskList":32}],32:[function(require,module,exports){
 const axios = require('axios')
+
 const taskListTemplate = require('./taskListTemplate')
+const { herokuURL } = require('./constants')
 
 function getTasks(token) {
-  return axios.get('http://localhost:5000/api/lists', {
+  return axios.get(`${herokuURL}/lists`, {
     headers: {
       authorization: `Bearer ${token}`
     }
@@ -1820,14 +1839,14 @@ function getTasks(token) {
 
 
 
-function createTaskList(token, listId) {
+function createTask(token, listId) {
   const newTitle = document.querySelector('#title').value
   const newDesc = document.querySelector('#description').value
   
 
  console.log('IN CREATE TASK', token)
 
-  return axios.post(`http://localhost:5000/api/lists/${listId}/tasks/`,
+  return axios.post(`${herokuURL}/lists/${listId}/tasks/`,
   {
     headers: {
       authorization: `Bearer ${token}` 
@@ -1841,8 +1860,8 @@ function createTaskList(token, listId) {
 
 
 
-module.exports = { getTasks, createTaskList }
-},{"./taskListTemplate":32,"axios":1}],32:[function(require,module,exports){
+module.exports = { getTasks, createTask }
+},{"./constants":28,"./taskListTemplate":33,"axios":1}],33:[function(require,module,exports){
 function getAllLists() {
   return `
   <h3>All Lists</h3>
@@ -1900,4 +1919,4 @@ module.exports = {
   doingCards,
   centerTasks
 }
-},{}]},{},[30]);
+},{}]},{},[31]);

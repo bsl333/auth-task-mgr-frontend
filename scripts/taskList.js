@@ -1,8 +1,10 @@
 const axios = require('axios')
+
 const taskListTemplate = require('./taskListTemplate')
+const { herokuURL } = require('./constants')
 
 function getTasks(token) {
-  return axios.get('http://localhost:5000/api/lists', {
+  return axios.get(`${herokuURL}/lists`, {
     headers: {
       authorization: `Bearer ${token}`
     }
@@ -74,14 +76,14 @@ function getTasks(token) {
 
 
 
-function createTaskList(token, listId) {
+function createTask(token, listId) {
   const newTitle = document.querySelector('#title').value
   const newDesc = document.querySelector('#description').value
   
 
  console.log('IN CREATE TASK', token)
 
-  return axios.post(`http://localhost:5000/api/lists/${listId}/tasks/`,
+  return axios.post(`${herokuURL}/lists/${listId}/tasks/`,
   {
     headers: {
       authorization: `Bearer ${token}` 
@@ -95,4 +97,4 @@ function createTaskList(token, listId) {
 
 
 
-module.exports = { getTasks, createTaskList }
+module.exports = { getTasks, createTask }
