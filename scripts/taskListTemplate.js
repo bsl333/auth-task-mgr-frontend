@@ -6,11 +6,10 @@ function getAllLists() {
   `
 }
 
-function centerTasks () {
-  return `<h3>Doing</h3>
-            <ul id="doingUL">
-          </ul>
-  
+function centerTasks() {
+  return `
+  <h3>Doing</h3>
+  <ul id="doingUL"></ul>
   `
 
 }
@@ -33,19 +32,15 @@ function newTaskForm() {
   `
 }
 
-function doingCards(title,desc) {
-  return `
-  
-        
-        
-        <div class="card text-center">
-          <div class="card-body">
-            <h5 class="card-title">${title}</h5>
-            <p class="card-text">${desc}</p>
-            <a href="#" class="btn btn-primary">Go somewhere</a>
-          </div>
-        </div>
-        </ul>
+function doingCards(title, desc) {
+  return `  
+  <div class="card text-center">
+    <div class="card-body">
+      <h5 class="card-title">${title}</h5>
+      <p class="card-text">${desc}</p>
+      <a href="#" class="btn btn-primary">Go somewhere</a>
+    </div>
+  </div>
   `
 }
 

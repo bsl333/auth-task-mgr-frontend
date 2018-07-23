@@ -1775,35 +1775,13 @@ function getTasks(token) {
   })
     .then(res => {
       const { lists } = res.data
+      // LEFT PANEL
       generateLists(lists)
-
-      //CENTER PANEL
-      const center = document.querySelector('#center')
-      center.innerHTML = taskListTemplate.centerTasks()
-      const doingUL = document.querySelector('#doingUL')
-      
-      lists[0].tasks.forEach(task => {
-        //console.log('task.title:', task.title)
-        const doingLi = document.createElement('li')
-        doingLi.innerHTML += taskListTemplate.doingCards(task.title, task.description)
-        doingUL.appendChild(doingLi)
-      })
+      // CENTER PANEL: only render first list to start
+      generateTasks(lists[0])
     })
 
-    center.innerHTML = doingUL
-
-
-
-
-  // const newTask = document.querySelector("newTask")
-
-
-  // newTask.addEventListener('submit', (event) => {
-  //   event.preventDefault()
-
-  //   console.log('IN ADD E LISTENER')
-  //   createTaskList(token, listId)
-  // })
+  center.innerHTML = doingUL
 }
 
 function generateLists(lists) {
@@ -1811,7 +1789,7 @@ function generateLists(lists) {
   const left = document.querySelector('#left')
   left.innerHTML = taskListTemplate.getAllLists()
   const ul = document.querySelector('#all-lists')
-  
+
   lists.forEach((list, idx) => {
     const li = document.createElement('li')
     li.className = 'list-group-item'
@@ -1819,16 +1797,29 @@ function generateLists(lists) {
     li.setAttribute('index', idx)
     ul.appendChild(li)
     li.addEventListener('click', () => {
-      console.log('clicked', li.classList)
-      // CHANGE THIS LINE BELOW
-      Array.from(document.querySelector('#all-lists').children).forEach(child => child.classList.remove('active'))
-      li.classList.add('active')  
+      generateTasks(list)
+      // remove active classes from all lis except selected
+      const lis = Array.from(document.querySelector('#all-lists').children)
+      lis.forEach(child => child.classList.remove('active'))
+      li.classList.add('active')
     })
   })
   const div = document.createElement('div')
   div.innerHTML = taskListTemplate.newTaskForm()
   left.appendChild(div)
   ul.firstElementChild.classList = 'list-group-item active'
+}
+
+function generateTasks({ tasks }) {
+  const center = document.querySelector('#center')
+  center.innerHTML = taskListTemplate.centerTasks()
+  const doingUL = document.querySelector('#doingUL')
+
+  tasks.forEach(task => {
+    const doingLi = document.createElement('li')
+    doingLi.innerHTML += taskListTemplate.doingCards(task.title, task.description)
+    doingUL.appendChild(doingLi)
+  })
 }
 
 
@@ -1863,11 +1854,10 @@ function getAllLists() {
   `
 }
 
-function centerTasks () {
-  return `<h3>Doing</h3>
-            <ul id="doingUL">
-          </ul>
-  
+function centerTasks() {
+  return `
+  <h3>Doing</h3>
+  <ul id="doingUL"></ul>
   `
 
 }
@@ -1890,19 +1880,15 @@ function newTaskForm() {
   `
 }
 
-function doingCards(title,desc) {
-  return `
-  
-        
-        
-        <div class="card text-center">
-          <div class="card-body">
-            <h5 class="card-title">${title}</h5>
-            <p class="card-text">${desc}</p>
-            <a href="#" class="btn btn-primary">Go somewhere</a>
-          </div>
-        </div>
-        </ul>
+function doingCards(title, desc) {
+  return `  
+  <div class="card text-center">
+    <div class="card-body">
+      <h5 class="card-title">${title}</h5>
+      <p class="card-text">${desc}</p>
+      <a href="#" class="btn btn-primary">Go somewhere</a>
+    </div>
+  </div>
   `
 }
 
