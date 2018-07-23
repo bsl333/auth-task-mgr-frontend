@@ -1631,7 +1631,7 @@ process.umask = function() { return 0; };
 
 },{}],28:[function(require,module,exports){
 const localhostURL = 'http://localhost:5000/api'
-const herokuURL = 'https://task-manager-back-end.herokuapp.com/api'
+const herokuURL = 'https://limitless-spire-56303.herokuapp.com/api'
 const baseURL = window.location.href.includes('herokuapp') ? herokuURL : localhostURL
 
 module.exports = {
@@ -1776,6 +1776,7 @@ function getTasks(token) {
     .then(res => {
       console.log('THIS', res.data)
       const { lists } = res.data
+      console.log(res.data)
       
       generateLists(lists)
 
@@ -1800,7 +1801,6 @@ function getTasks(token) {
 
 
 
-  left.innerHTML += taskListTemplate.newTaskForm()
 
   // const newTask = document.querySelector("newTask")
 
@@ -1814,13 +1814,11 @@ function getTasks(token) {
 }
 
 function generateLists(lists) {
+  window.location.hash = `/login/${lists[0].user_id}`
   const left = document.querySelector('#left')
   left.innerHTML = taskListTemplate.getAllLists()
   const ul = document.querySelector('#all-lists')
-
-  const userID = lists[0].user_id
-  console.log(userID)
-  window.location.hash = `/login/${userID}`
+  
   lists.forEach((list, idx) => {
     const li = document.createElement('li')
     li.className = 'list-group-item'
@@ -1829,14 +1827,14 @@ function generateLists(lists) {
     ul.appendChild(li)
     li.addEventListener('click', () => {
       console.log('clicked', li.classList)
-      
       // CHANGE THIS LINE BELOW
       Array.from(document.querySelector('#all-lists').children).forEach(child => child.classList.remove('active'))
-      li.classList.add('active')
-
+      li.classList.add('active')  
     })
   })
-
+  const div = document.createElement('div')
+  div.innerHTML = taskListTemplate.newTaskForm()
+  left.appendChild(div)
   ul.firstElementChild.classList = 'list-group-item active'
 }
 
