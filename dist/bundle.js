@@ -1669,6 +1669,7 @@ function createLogin() {
       .then(res => {
         console.log(res)
         localStorage.setItem('token', res.data.token)
+       
       })
       .catch(e => {
         const centerDiv = document.querySelector('#center')
@@ -1738,7 +1739,7 @@ if (!token) {
   getTask.getTasks(token)
     .catch(e => {
       console.log(e)
-      localStorage.removeItem('token')
+     // localStorage.removeItem('token')
       login.createLogin()
     })
 }
@@ -1753,27 +1754,94 @@ function getTasks(token) {
     }
   })
   .then(res => {
-    console.log(res)
+    console.log('THIS', res.data)
+    
+ //   document.querySelector('#toggleTasks').classList.toggle('d-none', false)
     const left = document.querySelector('#left')
     left.innerHTML =  taskListTemplate.getAllLists()
     const ul = document.querySelector('#all-lists')
     const lists = res.data.lists
-    console.log(lists[0])
+
+    
+    const userID = lists[0].user_id
+    console.log(userID)
+    window.location.hash = `/login/${userID}`
+
+    //CENTER PANEL
+    const center = document.querySelector('#center')
+    center.innerHTML = taskListTemplate.centerTasks()
+    const doingUL = document.querySelector('#doingUL')
+    
+    
+    
+    
     
     lists.forEach(list => {
+      console.log(list)
+      
       const li = document.createElement('li')
-      li.className = 'list-group-item'
-      li.innerText = list.title
-      ul.appendChild(li)
+        li.className = 'list-group-item'
+        li.innerText = list.title
+        ul.appendChild(li)
+        li.addEventListener('click',() => {
+          console.log('clicked',li.classList)
+          li.classList.add('active')
+        })
+      })
+
+    ul.firstElementChild.classList = 'list-group-item active'
+
+    
+      //FOR CENTER PANEL
+      let tasks = list.tasks
+      console.log('TASKS: ', userID)
+      tasks.forEach(task => {
+        //console.log('task.title:', task.title)
+        const doingLi = document.createElement('li')
+        doingLi.innerHTML += taskListTemplate.doingCards(task.title, task.description)
+        doingUL.appendChild(doingLi)
+       })
     })
+
+    
 
     left.innerHTML += taskListTemplate.newTaskForm()
 
+    // const newTask = document.querySelector("newTask")
+    
 
-  })
+    // newTask.addEventListener('submit', (event) => {
+    //   event.preventDefault()
+
+    //   console.log('IN ADD E LISTENER')
+    //   createTaskList(token, listId)
+   // })
+  }
+
+
+
+function createTaskList(token, listId) {
+  const newTitle = document.querySelector('#title').value
+  const newDesc = document.querySelector('#description').value
+  
+
+ console.log('IN CREATE TASK', token)
+
+  return axios.post(`http://localhost:5000/api/lists/${listId}/tasks/`,
+  {
+    headers: {
+      authorization: `Bearer ${token}` 
+    }
+  }, {title: newTitle, description: newDesc, list_id:3}  //explicit list id but needs to be from selection
+  ).then(res => {
+        console.log(res)
+    })
+
 }
 
-module.exports = { getTasks }
+
+
+module.exports = { getTasks, createTaskList }
 },{"./taskListTemplate":32,"axios":1}],32:[function(require,module,exports){
 function getAllLists() {
   return `
@@ -1783,9 +1851,18 @@ function getAllLists() {
   `
 }
 
+function centerTasks () {
+  return `<h3>Doing</h3>
+            <ul id="doingUL">
+          </ul>
+  
+  `
+
+}
+
 function newTaskForm() {
   return `
-  <form class="mt-5 bg-dark p-3">
+  <form class="mt-5 bg-dark p-3" id="newTask">
     <h4>Create New Task</h4>
     <div class="form-group">
       <label for="title">Title</label>
@@ -1801,8 +1878,26 @@ function newTaskForm() {
   `
 }
 
+function doingCards(title,desc) {
+  return `
+  
+        
+        
+        <div class="card text-center">
+          <div class="card-body">
+            <h5 class="card-title">${title}</h5>
+            <p class="card-text">${desc}</p>
+            <a href="#" class="btn btn-primary">Go somewhere</a>
+          </div>
+        </div>
+        </ul>
+  `
+}
+
 module.exports = {
   getAllLists,
-  newTaskForm
+  newTaskForm,
+  doingCards,
+  centerTasks
 }
 },{}]},{},[30]);

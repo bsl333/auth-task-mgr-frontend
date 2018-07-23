@@ -37,6 +37,7 @@ function createLogin() {
       .then(res => {
         console.log(res)
         localStorage.setItem('token', res.data.token)
+       
       })
       .catch(e => {
         const centerDiv = document.querySelector('#center')
