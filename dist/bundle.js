@@ -1642,6 +1642,8 @@ module.exports = {
 
 
 },{}],29:[function(require,module,exports){
+const axios = require('axios')
+
 const loginTemplate = require('./loginTemplate')
 const { getTasks } = require('./taskList')
 const { herokuURL } = require('./constants')
@@ -1697,7 +1699,7 @@ function createLogin() {
   })
 }
 module.exports = { createLogin }
-},{"./constants":28,"./loginTemplate":30,"./taskList":32}],30:[function(require,module,exports){
+},{"./constants":28,"./loginTemplate":30,"./taskList":32,"axios":1}],30:[function(require,module,exports){
 function login() {
   return `
   <form class="border" id="loginForm">
@@ -1827,7 +1829,7 @@ function generateTasks({ tasks }) {
     } else {
       li.innerHTML = taskListTemplate.completedCards(task.title, task.description)
       completedUL.appendChild(li)
-    }
+    } //
   })
 }
 

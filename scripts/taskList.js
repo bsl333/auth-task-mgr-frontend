@@ -63,7 +63,7 @@ function generateTasks({ tasks }) {
     } else {
       li.innerHTML = taskListTemplate.completedCards(task.title, task.description)
       completedUL.appendChild(li)
-    }
+    } //
   })
 }
 
