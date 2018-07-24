@@ -37,7 +37,6 @@ function createNavBarTasks() {
   const leftDiv = document.querySelector('#left')
   const rightDiv = document.querySelector('#right')
 
-  console.log(centerDiv)
   navbar.innerHTML = loginTemplate.NavBarTaskTemplate()
   // const allTaskBtn = document.querySelector('#')
   const newListBtn = document.querySelector('#newList')
@@ -55,7 +54,6 @@ function createNavBarTasks() {
 
   newListBtn.addEventListener('click', (event) => {
     event.preventDefault()
-    console.log('IN ADD NEW LIST')
     centerDiv.innerHTML = ''
     leftDiv.innerHTML = ''
     rightDiv.innerHTML = ''
@@ -75,14 +73,11 @@ function addNewList() {
     const body = {
       title: document.querySelector('#newListTitle').value
     }
-    console.log('Sending:' , body)
-
     return axios(`${herokuURL}/lists`, {
       headers: {authorization: `Bearer ${token}`},
         data: body,
         method: 'POST'})
     .then(() => {
-        console.log('New List Created, rebuild')
         createNavBarTasks()
         getTasks(token)
       }).catch(e => {

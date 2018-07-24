@@ -10,33 +10,33 @@ function getTasks(token, listId) {
     }
   })
     .then(res => {
+      allTasksBtn()
       const { lists } = res.data
       let listIndex = lists.findIndex(list => list.id === listId)
       listIndex = listIndex > -1 ? listIndex : 0
       // LEFT PANEL
-      if(lists.length === 0) {
-          generateLists(lists, listIndex)
-          createTask()
+      if (lists.length === 0) {
+        generateLists(lists, listIndex)
+        createTask()
       } else {
-          generateLists(lists, listIndex)
-          // CENTER/RIGHT PANEL: only render first list to start
-          generateTasks(lists[listIndex])
-          createTask()
-          setListToActive(lists[listIndex], listIndex)
+        generateLists(lists, listIndex)
+        // CENTER/RIGHT PANEL: only render first list to start
+        generateTasks(lists[listIndex])
+        createTask()
+        setListToActive(lists[listIndex], listIndex)
       }
     })
 }
 
 function generateLists(lists, index) {
-  console.log(lists)
-  if(lists.length === 0) {
+  if (lists.length === 0) {
     window.location.hash = `/lists`
     const left = document.querySelector('#left')
     const div = document.createElement('div')
     div.innerHTML = taskListTemplate.newTaskForm()
     left.appendChild(div)
   } else {
-  
+
     window.location.hash = `/lists/${lists[index].id}`
     const left = document.querySelector('#left')
     left.innerHTML = taskListTemplate.getAllLists()
@@ -58,7 +58,7 @@ function generateLists(lists, index) {
     div.innerHTML = taskListTemplate.newTaskForm()
     left.appendChild(div)
     ul.firstElementChild.classList = 'list-group-item active'
-  } 
+  }
 }
 
 function generateTasks({ tasks }) {
@@ -94,8 +94,8 @@ function createTask() {
     const newDesc = document.querySelector('#description').value
     const token = localStorage.getItem('token')
     return axios(`${herokuURL}/lists/${listId}/tasks`,
-      { 
-        headers: { authorization: `Bearer ${token}`},
+      {
+        headers: { authorization: `Bearer ${token}` },
         data: { title: newTitle, description: newDesc, list_id: listId },
         method: 'POST'
       }
@@ -117,13 +117,13 @@ function addEventListenersToBtns() {
       const taskId = event.target.getAttribute('task-id')
 
       const options = {
-        headers: { authorization: `Bearer ${token}`},
+        headers: { authorization: `Bearer ${token}` },
         data: { completed: true },
         method: 'PATCH'
       }
       axios(`${herokuURL}/lists/${listId}/tasks/${taskId}`, options)
         .then(() => getTasks(token, getActiveListId()))
-  
+
     })
 
     completedBtns.forEach(btn => {
@@ -152,6 +152,14 @@ function setListToActive(list) {
   lis.forEach(li => li.classList.remove('active'))
   const [li] = lis.filter(li => li.getAttribute('list-id') == list.id)
   li.classList.add('active')
+}
+
+function allTasksBtn() {
+  document.querySelector('#allTasks').addEventListener('click', (event) => {
+    event.preventDefault()
+    const token = localStorage.getItem('token')
+    getTasks(token)
+  })
 }
 
 module.exports = { getTasks, createTask }
