@@ -1,7 +1,7 @@
 function getAllLists() {
   return `
   <h3>All Lists</h3>
-  <ul class="list-group" id="all-lists">
+  <ul class="list-group mt-3" id="all-lists">
   </ul>
   `
 }
@@ -28,7 +28,7 @@ function newTaskForm() {
     <h4>Create New Task</h4>
     <div class="form-group">
       <label for="title">Title</label>
-      <input type="text" name="title" id="title" class="form-control">
+      <input type="text" name="title" id="title" class="form-control" required>
     </div>
     <div class="form-group">
       <label for="description">Description</label>
@@ -40,25 +40,25 @@ function newTaskForm() {
   `
 }
 
-function doingCards(title, desc) {
+function doingCards(title, desc, taskId) {
   return `  
-  <div class="card text-center">
+  <div class="card text-center my-3">
     <div class="card-body">
       <h5 class="card-title">${title}</h5>
       <p class="card-text">${desc}</p>
-      <a href="#" class="btn btn-success btn-max-width">Complete</a>
+      <a href="#" class="btn btn-success btn-max-width" task-id="${taskId}">Complete</a>
     </div>
   </div>
   `
 }
 
-function completedCards (title, desc) {
+function completedCards (title, desc, taskId) {
   return `  
-  <div class="card text-center">
+  <div class="card text-center my-3">
     <div class="card-body">
       <h5 class="card-title">${title}</h5>
       <p class="card-text">${desc}</p>
-      <a href="#" class="btn btn-danger btn-max-width">Remove</a>
+      <a href="#" class="btn btn-danger btn-max-width" task-id="${taskId}">Remove</a>
     </div>
   </div>
   `
