@@ -91,7 +91,7 @@ function createNewListTemplate() {
         <h1 class="border-bottom">New List</h1>
         <div class="form-group mx-5">
           <label for="Title">Title</label>
-          <input type="text" name="newListTitle" id="newListTitle" class="form-control"/>
+          <input type="text" name="newListTitle" id="newListTitle" class="form-control" required/>
         </div>
         <button type="submit" class="btn btn-success mb-3">Create a New List</button>
       </form>

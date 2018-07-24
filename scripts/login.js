@@ -16,7 +16,8 @@ function createNavBar() {
     loginBtn.addEventListener('click', (event) => {
       event.preventDefault()
       const centerDiv = document.querySelector('#center')
-      centerDiv.innerHTML = loginTemplate.login()
+      // centerDiv.innerHTML = loginTemplate.login()
+      createLogin()
       location.hash = '/login'
     })
 
@@ -158,4 +159,4 @@ function registerNewUSer() {
 }
 
 
-module.exports = { createLogin, createNavBar, createNavBarTasks, registerNewUSer }
+module.exports = { createLogin, createNavBar, createNavBarTasks }

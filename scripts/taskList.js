@@ -3,7 +3,7 @@ const axios = require('axios')
 const taskListTemplate = require('./taskListTemplate')
 const { herokuURL } = require('./constants')
 
-function getTasks(token, index = 0) {
+function getTasks(token, listId) {
   return axios.get(`${herokuURL}/lists`, {
     headers: {
       authorization: `Bearer ${token}`
@@ -11,16 +11,18 @@ function getTasks(token, index = 0) {
   })
     .then(res => {
       const { lists } = res.data
+      let listIndex = lists.findIndex(list => list.id === listId)
+      listIndex = listIndex > -1 ? listIndex : 0
       // LEFT PANEL
       if(lists.length === 0) {
-          generateLists(lists, index)
+          generateLists(lists, listIndex)
           createTask()
       } else {
-          generateLists(lists, index)
+          generateLists(lists, listIndex)
           // CENTER/RIGHT PANEL: only render first list to start
-          generateTasks(lists[index])
+          generateTasks(lists[listIndex])
           createTask()
-          setActiveList(lists[index], index)
+          setListToActive(lists[listIndex], listIndex)
       }
     })
 }
@@ -34,24 +36,22 @@ function generateLists(lists, index) {
     div.innerHTML = taskListTemplate.newTaskForm()
     left.appendChild(div)
   } else {
+  
     window.location.hash = `/lists/${lists[index].id}`
     const left = document.querySelector('#left')
     left.innerHTML = taskListTemplate.getAllLists()
     const ul = document.querySelector('#all-lists')
 
-    lists.forEach((list, idx) => {
+    lists.forEach((list) => {
       const li = document.createElement('li')
       li.className = 'list-group-item'
       li.innerText = list.title
-      li.setAttribute('index', idx)
+      li.setAttribute('list-id', list.id)
       ul.appendChild(li)
       li.addEventListener('click', () => {
         generateTasks(list)
-        // remove active classes from all lis except selected
-        const lis = Array.from(document.querySelector('#all-lists').children)
         window.location.hash = `/lists/${list.id}`
-        lis.forEach(child => child.classList.remove('active'))
-        li.classList.add('active')
+        setListToActive(list)
       })
     })
     const div = document.createElement('div')
@@ -98,9 +98,9 @@ function createTask() {
         headers: { authorization: `Bearer ${token}`},
         data: { title: newTitle, description: newDesc, list_id: listId },
         method: 'POST'
-      } //explicit list id but needs to be from selection
+      }
     ).then(() => {
-      getTasks(localStorage.getItem('token'), getActiveListIndex())
+      getTasks(localStorage.getItem('token'), getActiveListId())
     })
   })
 }
@@ -122,7 +122,7 @@ function addEventListenersToBtns() {
         method: 'PATCH'
       }
       axios(`${herokuURL}/lists/${listId}/tasks/${taskId}`, options)
-        .then(() => getTasks(token, getActiveListIndex()))
+        .then(() => getTasks(token, getActiveListId()))
   
     })
 
@@ -136,24 +136,22 @@ function addEventListenersToBtns() {
           method: 'DELETE'
         }
         axios(`${herokuURL}/lists/${listId}/tasks/${taskId}`, options)
-          .then(() => getTasks(token, getActiveListIndex()))
+          .then(() => getTasks(token, getActiveListId()))
       })
     })
   })
 }
 
-function getActiveListIndex() {
+function getActiveListId() {
   const li = document.querySelector('#left ul li.active')
-  return parseInt(li.getAttribute('index'))
+  return parseInt(li.getAttribute('list-id'))
 }
 
-function setActiveList(list, index) {
-  const listId = list.id
+function setListToActive(list) {
   const lis = Array.from(document.querySelectorAll('#left ul li'))
   lis.forEach(li => li.classList.remove('active'))
-  const [li] = lis.filter(li => li.getAttribute('index') == index)
+  const [li] = lis.filter(li => li.getAttribute('list-id') == list.id)
   li.classList.add('active')
-  
 }
 
 module.exports = { getTasks, createTask }
