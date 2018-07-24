@@ -1,6 +1,6 @@
 function getAllLists() {
   return `
-  <h3>All Lists</h3>
+  <h3 class="text-center">All Lists</h3>
   <ul class="list-group mt-3" id="all-lists">
   </ul>
   `
