@@ -21,15 +21,23 @@ function register() {
   <form class="border" id="registerForm">
     <h1 class="border-bottom">Register</h1>
     <div class="form-group mx-5">
+      <label for="fName">First Name</label>
+      <input type="text" name="fName" id="fName" class="form-control" required>
+    </div>
+    <div class="form-group mx-5">
+      <label for="lName">Last Name</label>
+      <input type="text" name="lName" id="lName" class="form-control" required>
+    </div>
+    <div class="form-group mx-5">
       <label for="regEmail">Email</label>
-      <input type="email" name="email" id="regEmail" class="form-control">
+      <input type="email" name="email" id="regEmail" class="form-control" required>
     </div>
     <div class="form-group mx-5">
       <label for="regPassword">Password</label>
-      <input type="password" name="password" id="regPassword" class="form-control">
+      <input type="password" name="password" id="regPassword" class="form-control" required>
     </div>
 
-    <button type="submit" class="btn btn-primary mb-3">Login!</button>
+    <button type="submit" class="btn btn-primary mb-3">Register!</button>
   </form>
   `
 }

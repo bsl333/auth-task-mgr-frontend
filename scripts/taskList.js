@@ -12,39 +12,53 @@ function getTasks(token, index = 0) {
     .then(res => {
       const { lists } = res.data
       // LEFT PANEL
-      generateLists(lists, index)
-      // CENTER/RIGHT PANEL: only render first list to start
-      generateTasks(lists[index])
-      createTask()
-      setActiveList(lists[index], index)
+      if(lists.length === 0) {
+          generateLists(lists, index)
+          createTask()
+      } else {
+          generateLists(lists, index)
+          // CENTER/RIGHT PANEL: only render first list to start
+          generateTasks(lists[index])
+          createTask()
+          setActiveList(lists[index], index)
+      }
     })
 }
 
 function generateLists(lists, index) {
-  window.location.hash = `/lists/${lists[index].id}`
-  const left = document.querySelector('#left')
-  left.innerHTML = taskListTemplate.getAllLists()
-  const ul = document.querySelector('#all-lists')
+  console.log(lists)
+  if(lists.length === 0) {
+    window.location.hash = `/lists`
+    const left = document.querySelector('#left')
+    const div = document.createElement('div')
+    div.innerHTML = taskListTemplate.newTaskForm()
+    left.appendChild(div)
+  } else {
+    window.location.hash = `/lists/${lists[index].id}`
+    const left = document.querySelector('#left')
+    left.innerHTML = taskListTemplate.getAllLists()
+    const ul = document.querySelector('#all-lists')
 
-  lists.forEach((list, idx) => {
-    const li = document.createElement('li')
-    li.className = 'list-group-item'
-    li.innerText = list.title
-    li.setAttribute('index', idx)
-    ul.appendChild(li)
-    li.addEventListener('click', () => {
-      generateTasks(list)
-      // remove active classes from all lis except selected
-      const lis = Array.from(document.querySelector('#all-lists').children)
-      window.location.hash = `/lists/${list.id}`
-      lis.forEach(child => child.classList.remove('active'))
-      li.classList.add('active')
+    lists.forEach((list, idx) => {
+      const li = document.createElement('li')
+      li.className = 'list-group-item'
+      li.innerText = list.title
+      li.setAttribute('index', idx)
+      ul.appendChild(li)
+      li.addEventListener('click', () => {
+        generateTasks(list)
+        // remove active classes from all lis except selected
+        const lis = Array.from(document.querySelector('#all-lists').children)
+        window.location.hash = `/lists/${list.id}`
+        lis.forEach(child => child.classList.remove('active'))
+        li.classList.add('active')
+      })
     })
-  })
-  const div = document.createElement('div')
-  div.innerHTML = taskListTemplate.newTaskForm()
-  left.appendChild(div)
-  ul.firstElementChild.classList = 'list-group-item active'
+    const div = document.createElement('div')
+    div.innerHTML = taskListTemplate.newTaskForm()
+    left.appendChild(div)
+    ul.firstElementChild.classList = 'list-group-item active'
+  } 
 }
 
 function generateTasks({ tasks }) {
@@ -89,7 +103,6 @@ function createTask() {
       getTasks(localStorage.getItem('token'), getActiveListIndex())
     })
   })
-
 }
 
 function addEventListenersToBtns() {
