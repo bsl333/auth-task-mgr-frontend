@@ -32,10 +32,14 @@ function createNavBar() {
 
 function createNavBarTasks() {
   const navbar = document.querySelector('#nb')
+  const centerDiv = document.querySelector('#center')
+  const leftDiv = document.querySelector('#left')
+  const rightDiv = document.querySelector('#right')
 
+  console.log(centerDiv)
   navbar.innerHTML = loginTemplate.NavBarTaskTemplate()
   // const allTaskBtn = document.querySelector('#')
-  // const newListBtn = document.querySelector('#')
+  const newListBtn = document.querySelector('#newList')
   const logoutBtn = document.querySelector('#logout')
 
   logoutBtn.addEventListener('click', (event) => {
@@ -44,8 +48,45 @@ function createNavBarTasks() {
     createLogin()
     location.hash = '/login'
     createNavBar()
-    document.querySelector('#left').innerHTML = ''
-    document.querySelector('#right').innerHTML = ''
+    leftDiv.innerHTML = ''
+    rightDiv.innerHTML = ''
+  })
+
+  newListBtn.addEventListener('click', (event) => {
+    event.preventDefault()
+    console.log('IN ADD NEW LIST')
+    centerDiv.innerHTML = ''
+    leftDiv.innerHTML = ''
+    rightDiv.innerHTML = ''
+    //centerDiv.innerHTML = loginTemplate.createNewListTemplate()
+    addNewList()
+  })  
+}
+
+function addNewList() {
+  const centerDiv = document.querySelector('#center')
+  centerDiv.innerHTML = loginTemplate.createNewListTemplate()
+  const newListForm = document.querySelector('#newListForm')
+  const token = window.localStorage.getItem('token')
+  
+  newListForm.addEventListener('submit', (event) => {
+    event.preventDefault()
+    const body = {
+      title: document.querySelector('#newListTitle').value
+    }
+    console.log('Sending:' , body)
+
+    return axios(`${herokuURL}/lists`, {
+      headers: {authorization: `Bearer ${token}`},
+        data: body,
+        method: 'POST'})
+    .then(() => {
+        console.log('New List Created, rebuild')
+        createNavBarTasks()
+        getTasks(token)
+      }).catch(e => {
+        console.log(e)
+      })
   })
 }
 
@@ -113,9 +154,8 @@ function registerNewUSer() {
         setTimeout(() => createLogin(), 2000)
         console.log(e)
       })
-
   })
-
 }
+
 
 module.exports = { createLogin, createNavBar, createNavBarTasks, registerNewUSer }
