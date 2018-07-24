@@ -125,19 +125,19 @@ function addEventListenersToBtns() {
         .then(() => getTasks(token, getActiveListId()))
 
     })
+  })
 
-    completedBtns.forEach(btn => {
-      btn.addEventListener('click', event => {
-        event.preventDefault()
-        const [listId] = window.location.href.split('/').slice(-1)
-        const taskId = event.target.getAttribute('task-id')
-        const options = {
-          headers: { authorization: `Bearer ${token}` },
-          method: 'DELETE'
-        }
-        axios(`${herokuURL}/lists/${listId}/tasks/${taskId}`, options)
-          .then(() => getTasks(token, getActiveListId()))
-      })
+  completedBtns.forEach(btn => {
+    btn.addEventListener('click', event => {
+      event.preventDefault()
+      const [listId] = window.location.href.split('/').slice(-1)
+      const taskId = event.target.getAttribute('task-id')
+      const options = {
+        headers: { authorization: `Bearer ${token}` },
+        method: 'DELETE'
+      }
+      axios(`${herokuURL}/lists/${listId}/tasks/${taskId}`, options)
+        .then(() => getTasks(token, getActiveListId()))
     })
   })
 }
