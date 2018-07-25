@@ -166,8 +166,7 @@ function formatInactiveLists(li) {
     btn.textContent = 'Delete'
     btn.addEventListener('click', (event) => {
       event.preventDefault()
-      console.log(`DELETE CLICKED`)
-
+      event.stopPropagation()
       const token = localStorage.getItem('token')
       const listId = event.target.getAttribute('list-id')
       const options = {
@@ -181,9 +180,6 @@ function formatInactiveLists(li) {
     li.appendChild(btn)
 
   }
-  // li.children[0].remove()
-  // li.innerHTML = `<button type="button" class="btn btn-primary float-right">Primary <span class="badge">7</span></button>`
-
 }
 
 function allTasksBtn() {
