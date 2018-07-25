@@ -46,6 +46,8 @@ function generateLists(lists, index) {
       const li = document.createElement('li')
       li.className = 'list-group-item'
       li.innerText = list.title
+      // li.innerHTML += `<button type="button" class="btn btn-danger float-right">delete <span class="badge">7</span></button>
+      // `
       li.setAttribute('list-id', list.id)
       ul.appendChild(li)
       li.addEventListener('click', () => {
@@ -149,9 +151,39 @@ function getActiveListId() {
 
 function setListToActive(list) {
   const lis = Array.from(document.querySelectorAll('#left ul li'))
-  lis.forEach(li => li.classList.remove('active'))
+  lis.filter(li => li.getAttribute('list-id') != list.id).forEach(formatInactiveLists)
   const [li] = lis.filter(li => li.getAttribute('list-id') == list.id)
   li.classList.add('active')
+  if (li.firstElementChild) li.firstElementChild.remove()
+}
+
+function formatInactiveLists(li) {
+  li.classList.remove('active')
+  if (!li.firstElementChild) {
+    const btn = document.createElement('button')
+    btn.className = 'btn btn-danger float-right btn-sm'
+    btn.setAttribute('list-id', li.getAttribute('list-id'))
+    btn.textContent = 'Delete'
+    btn.addEventListener('click', (event) => {
+      event.preventDefault()
+      console.log(`DELETE CLICKED`)
+
+      const token = localStorage.getItem('token')
+      const listId = event.target.getAttribute('list-id')
+      const options = {
+        headers: { authorization: `Bearer ${token}` },
+        method: 'DELETE'
+      }
+      axios(`${herokuURL}/lists/${listId}`, options)
+        .then(() => getTasks(token))
+    })
+
+    li.appendChild(btn)
+
+  }
+  // li.children[0].remove()
+  // li.innerHTML = `<button type="button" class="btn btn-primary float-right">Primary <span class="badge">7</span></button>`
+
 }
 
 function allTasksBtn() {
