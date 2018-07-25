@@ -146,8 +146,7 @@ function registerNewUSer() {
         return res.data.token
       })
       .then(token => {
-        getTasks(token)
-        createNavBarTasks()
+        addNewList()
       })
       .catch(e => {
         const centerDiv = document.querySelector('#center')
