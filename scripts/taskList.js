@@ -1,5 +1,5 @@
 const axios = require('axios')
-
+const moment = require('moment')
 const taskListTemplate = require('./taskListTemplate')
 const { herokuURL } = require('./constants')
 
@@ -73,10 +73,10 @@ function generateTasks({ tasks }) {
   tasks.forEach(task => {
     const li = document.createElement('li')
     if (!task.completed) {
-      li.innerHTML = taskListTemplate.doingCards(task.title, task.description, task.id)
+      li.innerHTML = taskListTemplate.doingCards(task.title, task.description, task.id, moment(task.created_at).toNow(true))
       doingUL.appendChild(li)
     } else {
-      li.innerHTML = taskListTemplate.completedCards(task.title, task.description, task.id)
+      li.innerHTML = taskListTemplate.completedCards(task.title, task.description, task.id, moment(task.updated_at).toNow(true))
       completedUL.appendChild(li)
     }
   })
