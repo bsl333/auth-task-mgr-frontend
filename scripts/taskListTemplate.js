@@ -40,7 +40,7 @@ function newTaskForm() {
   `
 }
 
-function doingCards(title, desc, taskId) {
+function doingCards(title, desc, taskId, timeStamp) {
   return `  
   <div class="card text-center my-3">
     <div class="card-body">
@@ -48,17 +48,23 @@ function doingCards(title, desc, taskId) {
       <p class="card-text">${desc}</p>
       <a href="#" class="btn btn-success btn-max-width" task-id="${taskId}">Complete</a>
     </div>
+    <div class="card-footer">
+      <small class="text-muted">Created ${timeStamp} ago</small>
+    </div>
   </div>
   `
 }
 
-function completedCards (title, desc, taskId) {
+function completedCards(title, desc, taskId, timeStamp) {
   return `  
   <div class="card text-center my-3">
     <div class="card-body">
       <h5 class="card-title">${title}</h5>
       <p class="card-text">${desc}</p>
       <a href="#" class="btn btn-danger btn-max-width" task-id="${taskId}">Remove</a>
+    </div>
+    <div class="card-footer">
+      <small class="text-muted">Last updated ${timeStamp} ago</small>
     </div>
   </div>
   `
